@@ -1,5 +1,7 @@
 package server;
 
+import util.User;
+
 import java.rmi.Remote;
 import java.rmi.RemoteException;
 
@@ -14,4 +16,6 @@ public interface Service extends Remote {
     String start() throws RemoteException;
     String restart() throws RemoteException;
     String stop() throws RemoteException;
+    void addUser(User user);
+    Boolean login(User user);
 }

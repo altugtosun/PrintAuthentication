@@ -2,6 +2,9 @@ package server;
 
 import javafx.util.Pair;
 import util.PrintJob;
+import util.SQLiteJDBC;
+import util.User;
+
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;
@@ -87,5 +90,15 @@ public class ServiceImpl extends UnicastRemoteObject implements Service {
 
     public String stop() throws RemoteException {
         return "Print server stopped.";
+    }
+
+    public void addUser(User user) {
+        SQLiteJDBC.addUser(user.getUsername(), user.getPassword(), user.getSalt());
+    }
+
+    public Boolean login(User user) {
+        String storedPassword = SQLiteJDBC.getPassword(user.getUsername());
+        String storedSalt = SQLiteJDBC.getSalt(user.getUsername());
+        return(user.getPassword() == storedPassword && user.getSalt() == storedSalt);
     }
 }
