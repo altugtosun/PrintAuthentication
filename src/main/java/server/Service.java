@@ -2,20 +2,22 @@ package server;
 
 import util.User;
 
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.rmi.Remote;
 import java.rmi.RemoteException;
+import java.security.NoSuchAlgorithmException;
 
 public interface Service extends Remote {
-    void addPrinter(String printer) throws RemoteException;
-    void print(String filename, String printer) throws RemoteException;
-    String queue() throws RemoteException;
-    void topQueue(int jobId) throws RemoteException;
-    String readConfig(String parameter) throws RemoteException;
-    void setConfig(String parameter, String value) throws RemoteException;
-    String status() throws RemoteException;
-    String start() throws RemoteException;
-    String restart() throws RemoteException;
-    String stop() throws RemoteException;
-    void addUser(User user);
-    Boolean login(User user);
+    String addPrinter(String printer) throws RemoteException;
+    String print(String filename, String printer, User user) throws IOException, NoSuchAlgorithmException;
+    String queue(User user) throws IOException, NoSuchAlgorithmException;
+    String topQueue(int jobId, User user) throws IOException, NoSuchAlgorithmException;
+    String readConfig(String parameter, User user) throws IOException, NoSuchAlgorithmException;
+    String setConfig(String parameter, String value, User user) throws IOException, NoSuchAlgorithmException;
+    String status(User user) throws IOException, NoSuchAlgorithmException;
+    String start(User user) throws IOException, NoSuchAlgorithmException;
+    String restart(User user) throws IOException, NoSuchAlgorithmException;
+    String stop(User user) throws IOException, NoSuchAlgorithmException;
+    void addUser(User user) throws NoSuchAlgorithmException, UnsupportedEncodingException, RemoteException;
 }

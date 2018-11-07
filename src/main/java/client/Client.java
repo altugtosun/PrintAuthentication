@@ -1,58 +1,76 @@
 package client;
 
 import server.Service;
+import util.User;
 
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
 import java.rmi.Naming;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
+import java.security.NoSuchAlgorithmException;
 
 public class Client {
 
-    public static void main(String[] args) throws RemoteException, NotBoundException, MalformedURLException {
+    public static void main(String[] args) throws IOException, NotBoundException, NoSuchAlgorithmException {
 
         Service printService = (Service) Naming.lookup("rmi://localhost:5099/printauthentication");
+        User onat = new User("onat", "123456");
+        User intruder = new User("onat", "password");
 
-        System.out.println("---" + printService.start());
+        //printService.addUser(onat);
 
-        printService.addPrinter("printer1");
-        printService.addPrinter("printer2");
-        printService.addPrinter("printer3");
-        printService.addPrinter("printer4");
-        printService.addPrinter("printer5");
+        System.out.println("---" + printService.addPrinter("printer1"));
+        System.out.println("---" + printService.addPrinter("printer2"));
+        System.out.println("---" + printService.addPrinter("printer3"));
+        System.out.println("---" + printService.addPrinter("printer4"));
+        System.out.println("---" + printService.addPrinter("printer5"));
 
-        printService.print("file1", "printer1");
-        printService.print("file2", "printer2");
-        printService.print("file3", "printer3");
-        printService.print("file4", "printer4");
-        printService.print("file5", "printer5");
-        printService.print("file5", "printer1");
-        printService.print("file7", "printer2");
-        printService.print("file8", "printer3");
-        printService.print("file9", "printer4");
-        printService.print("file10", "printer5");
+        System.out.println("---" + printService.start(onat));
+        System.out.println("---" + printService.start(intruder));
 
-        System.out.println("---" + printService.queue());
+        System.out.println("---" + printService.print("file1", "printer1", onat));
+        System.out.println("---" + printService.print("file2", "printer2", onat));
+        System.out.println("---" + printService.print("file3", "printer3", onat));
+        System.out.println("---" + printService.print("file4", "printer4", onat));
+        System.out.println("---" + printService.print("file5", "printer5", onat));
+        System.out.println("---" + printService.print("file5", "printer1", onat));
+        System.out.println("---" + printService.print("file7", "printer2", onat));
+        System.out.println("---" + printService.print("file8", "printer3", onat));
+        System.out.println("---" + printService.print("file9", "printer4", onat));
+        System.out.println("---" + printService.print("file10", "printer5", onat));
+        System.out.println("---" + printService.print("file11", "printer1", intruder));
 
-        printService.topQueue(5);
-        printService.topQueue(8);
+        System.out.println("---" + printService.queue(onat));
+        System.out.println("---" + printService.queue(intruder));
 
-        System.out.println("---" + printService.queue());
+        System.out.println("---" + printService.topQueue(5, onat));
+        System.out.println("---" + printService.topQueue(8, onat));
+        System.out.println("---" + printService.topQueue(8, intruder));
 
-        printService.setConfig("param1", "value1");
-        printService.setConfig("param2", "value2");
-        printService.setConfig("param3", "value3");
+        System.out.println("---" + printService.queue(onat));
 
-        System.out.println("---" + printService.readConfig("param1"));
-        System.out.println("---" + printService.readConfig("param2"));
-        System.out.println("---" + printService.readConfig("param3"));
+        System.out.println("---" + printService.setConfig("param1", "value1", onat));
+        System.out.println("---" + printService.setConfig("param2", "value2", onat));
+        System.out.println("---" + printService.setConfig("param3", "value3", onat));
+        System.out.println("---" + printService.setConfig("param4", "value4", intruder));
 
-        System.out.println("---" + printService.status());
+        System.out.println("---" + printService.readConfig("param1", onat));
+        System.out.println("---" + printService.readConfig("param2", onat));
+        System.out.println("---" + printService.readConfig("param3", onat));
+        System.out.println("---" + printService.readConfig("param4", intruder));
 
-        System.out.println("---" + printService.restart());
-        System.out.println("---" + printService.queue());
-        System.out.println("---" + printService.readConfig("param1"));
+        System.out.println("---" + printService.status(onat));
+        System.out.println("---" + printService.status(intruder));
 
-        System.out.println("---" + printService.stop());
+        System.out.println("---" + printService.restart(onat));
+        System.out.println("---" + printService.restart(intruder));
+
+        System.out.println("---" + printService.queue(onat));
+        System.out.println("---" + printService.readConfig("param1", onat));
+
+        System.out.println("---" + printService.stop(onat));
+        System.out.println("---" + printService.stop(intruder));
     }
 }

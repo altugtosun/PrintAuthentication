@@ -14,7 +14,6 @@ public class SQLiteJDBC {
             Class.forName("org.sqlite.JDBC");
             c = DriverManager.getConnection("jdbc:sqlite:printauthentication.db");
             c.setAutoCommit(false);
-            System.out.println("Opened database successfully");
 
             stmt = c.createStatement();
             String sql = "INSERT INTO users (username, password, salt) " +
@@ -27,7 +26,6 @@ public class SQLiteJDBC {
             System.err.println(e.getClass().getName() + ": " + e.getMessage());
             System.exit(0);
         }
-        System.out.println("Records created successfully");
     }
 
     public static String getPassword(String username) {
@@ -39,10 +37,9 @@ public class SQLiteJDBC {
             Class.forName("org.sqlite.JDBC");
             c = DriverManager.getConnection("jdbc:sqlite:printauthentication.db");
             c.setAutoCommit(false);
-            System.out.println("Opened database successfully");
 
             stmt = c.createStatement();
-            String sql = "SELECT password " +
+            String sql = "SELECT password FROM users " +
                     "WHERE username='" + username + "';";
             ResultSet rs = stmt.executeQuery(sql);
 
@@ -50,14 +47,13 @@ public class SQLiteJDBC {
                 password = rs.getString("password");
             }
 
+            rs.close();
             stmt.close();
-            c.commit();
             c.close();
         } catch (Exception e) {
             System.err.println(e.getClass().getName() + ": " + e.getMessage());
             System.exit(0);
         }
-        System.out.println("Records created successfully");
         return password;
     }
 
@@ -70,25 +66,23 @@ public class SQLiteJDBC {
             Class.forName("org.sqlite.JDBC");
             c = DriverManager.getConnection("jdbc:sqlite:printauthentication.db");
             c.setAutoCommit(false);
-            System.out.println("Opened database successfully");
 
             stmt = c.createStatement();
-            String sql = "SELECT salt " +
+            String sql = "SELECT salt FROM users " +
                     "WHERE username='" + username + "';";
             ResultSet rs = stmt.executeQuery(sql);
 
             if (rs.next()) {
-                salt = rs.getString("password");
+                salt = rs.getString("salt");
             }
 
+            rs.close();
             stmt.close();
-            c.commit();
             c.close();
         } catch (Exception e) {
             System.err.println(e.getClass().getName() + ": " + e.getMessage());
             System.exit(0);
         }
-        System.out.println("Records created successfully");
         return salt;
     }
 }

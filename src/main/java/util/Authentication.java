@@ -8,11 +8,12 @@ import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.util.Random;
+import java.security.SecureRandom;
 
 public class Authentication {
 
     private static Authentication instance;
+    private static SecureRandom random;
 
     private Authentication() {
 
@@ -20,6 +21,7 @@ public class Authentication {
 
     static {
         instance = new Authentication();
+        random = new SecureRandom();
     }
 
     public static Authentication getInstance() {
@@ -28,11 +30,12 @@ public class Authentication {
 
     public byte[] salt(String password)  {
         byte[] salt = new byte[8];
-        new Random().nextBytes(salt);
+        random.nextBytes(salt);
         return salt;
     }
 
-    public Pair<String, String> hash(String password, byte[] salt) throws NoSuchAlgorithmException, UnsupportedEncodingException {
+    public Pair<String, String> hashWithoutSalt(String password) throws NoSuchAlgorithmException, UnsupportedEncodingException {
+        byte[] salt = salt(password);
         MessageDigest digest = MessageDigest.getInstance("SHA-512");
         digest.reset();
         digest.update(salt);
@@ -43,6 +46,20 @@ public class Authentication {
             digestedPassword = digest.digest(digestedPassword);
         }
         return new Pair<String, String>(byteToBase64(digestedPassword), byteToBase64(salt));
+    }
+
+    public String hashWithSalt(String password, String salt) throws NoSuchAlgorithmException, IOException {
+        byte[] byteSalt = base64ToByte(salt);
+        MessageDigest digest = MessageDigest.getInstance("SHA-512");
+        digest.reset();
+        digest.update(byteSalt);
+        byte[] digestedPassword = digest.digest(password.getBytes("UTF-8"));
+
+        for (int i = 0; i < 10000; i++) {
+            digest.reset();
+            digestedPassword = digest.digest(digestedPassword);
+        }
+        return byteToBase64(digestedPassword);
     }
 
     public String byteToBase64(byte[] data) {
