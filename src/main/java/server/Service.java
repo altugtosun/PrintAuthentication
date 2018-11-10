@@ -19,5 +19,7 @@ public interface Service extends Remote {
     String start(User user) throws IOException, NoSuchAlgorithmException;
     String restart(User user) throws IOException, NoSuchAlgorithmException;
     String stop(User user) throws IOException, NoSuchAlgorithmException;
+
+    //Assumed that users are in the database. So this function is just for test purposes.
     void addUser(User user) throws NoSuchAlgorithmException, UnsupportedEncodingException, RemoteException;
 }

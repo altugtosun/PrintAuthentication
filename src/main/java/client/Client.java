@@ -4,11 +4,8 @@ import server.Service;
 import util.User;
 
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
-import java.net.MalformedURLException;
 import java.rmi.Naming;
 import java.rmi.NotBoundException;
-import java.rmi.RemoteException;
 import java.security.NoSuchAlgorithmException;
 
 public class Client {
@@ -19,6 +16,7 @@ public class Client {
         User onat = new User("onat", "123456");
         User intruder = new User("onat", "password");
 
+        //Assumed that users are in the database. So this call is just for test purposes.
         //printService.addUser(onat);
 
         System.out.println("---" + printService.addPrinter("printer1"));

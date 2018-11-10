@@ -110,15 +110,16 @@ public class ServiceImpl extends UnicastRemoteObject implements Service {
         return "Print server stopped.";
     }
 
+    //Assumed that users are in the database. So this function is just for test purposes.
     public void addUser(User user) throws NoSuchAlgorithmException, UnsupportedEncodingException, RemoteException {
-        Pair<String, String> hashed = Authentication.getInstance().hashWithoutSalt(user.getPassword());
+        Pair<String, String> hashed = Authentication.getInstance().hashWitRandomSalt(user.getPassword());
         SQLiteJDBC.addUser(user.getUsername(), hashed.getKey(), hashed.getValue());
     }
 
     public Boolean login(User user) throws IOException, NoSuchAlgorithmException {
         String storedPassword = SQLiteJDBC.getPassword(user.getUsername());
         String storedSalt = SQLiteJDBC.getSalt(user.getUsername());
-        String hashed = Authentication.getInstance().hashWithSalt(user.getPassword(), storedSalt);
+        String hashed = Authentication.getInstance().hashWithGivenSalt(user.getPassword(), storedSalt);
         return(hashed.equals(storedPassword));
     }
 }

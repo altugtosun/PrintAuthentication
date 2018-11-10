@@ -34,28 +34,29 @@ public class Authentication {
         return salt;
     }
 
-    public Pair<String, String> hashWithoutSalt(String password) throws NoSuchAlgorithmException, UnsupportedEncodingException {
+    //Assumed that users are in the database. So this function is just for test purposes.
+    public Pair<String, String> hashWitRandomSalt(String password) throws NoSuchAlgorithmException, UnsupportedEncodingException {
         byte[] salt = salt(password);
         MessageDigest digest = MessageDigest.getInstance("SHA-512");
         digest.reset();
         digest.update(salt);
         byte[] digestedPassword = digest.digest(password.getBytes("UTF-8"));
 
-        for (int i = 0; i < 10000; i++) {
+        for (int i = 0; i < 1000; i++) {
             digest.reset();
             digestedPassword = digest.digest(digestedPassword);
         }
         return new Pair<String, String>(byteToBase64(digestedPassword), byteToBase64(salt));
     }
 
-    public String hashWithSalt(String password, String salt) throws NoSuchAlgorithmException, IOException {
+    public String hashWithGivenSalt(String password, String salt) throws NoSuchAlgorithmException, IOException {
         byte[] byteSalt = base64ToByte(salt);
         MessageDigest digest = MessageDigest.getInstance("SHA-512");
         digest.reset();
         digest.update(byteSalt);
         byte[] digestedPassword = digest.digest(password.getBytes("UTF-8"));
 
-        for (int i = 0; i < 10000; i++) {
+        for (int i = 0; i < 1000; i++) {
             digest.reset();
             digestedPassword = digest.digest(digestedPassword);
         }
