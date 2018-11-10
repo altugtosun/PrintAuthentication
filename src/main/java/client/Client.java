@@ -19,6 +19,7 @@ public class Client {
         //Assumed that users are in the database. So this call is just for test purposes.
         //printService.addUser(onat);
 
+        //Assumed that printers are already added in the server. So this is just for test purposes. No authentication needed.
         System.out.println("---" + printService.addPrinter("printer1"));
         System.out.println("---" + printService.addPrinter("printer2"));
         System.out.println("---" + printService.addPrinter("printer3"));

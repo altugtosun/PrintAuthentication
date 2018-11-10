@@ -28,15 +28,15 @@ public class Authentication {
         return instance;
     }
 
-    public byte[] salt(String password)  {
+    public byte[] salt()  {
         byte[] salt = new byte[8];
         random.nextBytes(salt);
         return salt;
     }
 
     //Assumed that users are in the database. So this function is just for test purposes.
-    public Pair<String, String> hashWitRandomSalt(String password) throws NoSuchAlgorithmException, UnsupportedEncodingException {
-        byte[] salt = salt(password);
+    public Pair<String, String> hashWithRandomSalt(String password) throws NoSuchAlgorithmException, UnsupportedEncodingException {
+        byte[] salt = salt();
         MessageDigest digest = MessageDigest.getInstance("SHA-512");
         digest.reset();
         digest.update(salt);
@@ -64,8 +64,8 @@ public class Authentication {
     }
 
     public String byteToBase64(byte[] data) {
-        BASE64Encoder endecoder = new BASE64Encoder();
-        return endecoder.encode(data);
+        BASE64Encoder encoder = new BASE64Encoder();
+        return encoder.encode(data);
     }
 
     public byte[] base64ToByte(String data) throws IOException {

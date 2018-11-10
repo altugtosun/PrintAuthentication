@@ -1,7 +1,5 @@
 package util;
 
-import javafx.util.Pair;
-
 import java.sql.*;
 
 public class SQLiteJDBC {

@@ -1,3 +1,4 @@
 target/
 .idea/
 PrintAuthentication.iml
+print-server-log.log
