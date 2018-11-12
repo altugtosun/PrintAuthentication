@@ -3,12 +3,17 @@ package client;
 import server.Service;
 import util.User;
 
+import javax.net.SocketFactory;
+import javax.net.ssl.SSLSocketFactory;
 import java.io.IOException;
+import java.io.Serializable;
+import java.net.Socket;
 import java.rmi.Naming;
 import java.rmi.NotBoundException;
+import java.rmi.server.RMIClientSocketFactory;
 import java.security.NoSuchAlgorithmException;
 
-public class Client {
+public class Client implements RMIClientSocketFactory, Serializable {
 
     public static void main(String[] args) throws IOException, NotBoundException, NoSuchAlgorithmException {
 
@@ -71,5 +76,11 @@ public class Client {
 
         System.out.println("---" + printService.stop(onat));
         System.out.println("---" + printService.stop(intruder));
+    }
+
+    public Socket createSocket(String host, int port) throws IOException {
+        SocketFactory factory = SSLSocketFactory.getDefault();
+        Socket socket = factory.createSocket(host, port);
+        return socket;
     }
 }
